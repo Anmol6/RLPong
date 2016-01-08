@@ -40,9 +40,46 @@ class Ball(pygame.sprite.Sprite):
 		self.area = screen.get_rect()
 	#Update spatial position of ball given velocity vector	
 	def updatepos(self):
-		angle, z = self.vector
-		move_x,move_y = (z*math.cos(angle)), (z*math.sin(angle))
+		angle, vel = self.vector
+		move_x,move_y = (vel*math.cos(angle)), (vel*math.sin(angle))
 		newpos = self.rect.move(move_x,move_y)
+
+		#looking at collisions with sides of frame
+		if not self.area.contains(newpos):
+			tl_out = not self.area.collidepoint(newpos.topleft)
+			tr_out = not self.area.collidepoint(newpos.topright)
+			bl_out = not self.area.collidepoint(newpos.bottomleft)
+			br_out = not self.area.collidepoint(newpos.bottomright)
+			#if ball goes from sides
+			if (tl_out and tr_out) or (bl_out and br_out):
+				angle = -angle
+			#if ball goes past any of the players, ball is put on the other side of the court	
+			if (tl_out and bl_out):
+				self.offcourt(player=2)
+			if (br_out and tr_out):
+				self.offcourt(player=1)
+
+		else:
+			#shrink both paddles, so they can't get the ball once it goes past
+			player1.rect.inflate(-3,-3)
+			player2.rect.inflace(-3,-3)
+
+			if self.rect.collidepoint(player1.rect) ==1 and not self.hitpaddle:
+				self.hitpaddle = 1
+				angle = math.pi - angle
+
+			if self.rect.collidepoint(player2.rect) == 1 and not self.hitpaddle:
+				self.hitpaddle = 1
+				angle = math.pi - angle
+
+			elif self.hitpaddle:
+				self.hitpaddle = 0
+		self.vector = (angle, vel)
+
+
+
+
+
 
 
 class Paddle(pygame.sprite.Sprite):
