@@ -2,7 +2,7 @@ import pygame, sys, math
 from pygame.locals import *
 from random import randint
 
-pygame.init()
+
 #size = width, height = 320, 240
 #speed = [2, 2]
 #black = 0, 0, 0
@@ -11,12 +11,7 @@ pygame.init()
 #ballrect = ball.get_rect()
 #Create objects
 #Set screen size
-size = width,height = 600,400
-screen = pygames.display.set_mode(size)
-#Set Background
-background = pygame.Surface(screen.get_size())
-background = background.convert()
-background.fill((200,150,120))
+
 speedb=10
 speedb1 = [0,1]
 speedb2 = [0,1]
@@ -35,7 +30,7 @@ class Ball(pygame.sprite.Sprite):
 		ball_image = pygame.image.load('ball.gif')
 		self.image = ball_image.convert()
 		self.rect = self.image.get_rect()
-		
+		self.hitpaddle = 0
 		screen = pygame.display.get_surface()
 		self.area = screen.get_rect()
 	#Update spatial position of ball given velocity vector	
@@ -61,8 +56,8 @@ class Ball(pygame.sprite.Sprite):
 
 		else:
 			#shrink both paddles, so they can't get the ball once it goes past
-			player1.rect.inflate(-3,-3)
-			player2.rect.inflace(-3,-3)
+			playerleft.rect.inflate(-3,-3)
+			playerright.rect.inflace(-3,-3)
 
 			if self.rect.collidepoint(player1.rect) ==1 and not self.hitpaddle:
 				self.hitpaddle = 1
@@ -83,15 +78,20 @@ class Ball(pygame.sprite.Sprite):
 
 
 class Paddle(pygame.sprite.Sprite):
-	def _init_(self,side,posvector,speedb):
+	def _init_(self,side,speedb):
 		self.side = side
 		pygame.sprite.Sprite._init_(self)
-		self.paddle = pygame.Surface(posvector)
+		self.area = screen.get_rect
+		if side == "left":
+			self.paddle = pygame.Surface(self.area.midleft)
+		elif side == "right":
+			self.paddle = pygame.Surface(self.area.midright)
+		
 		paddle.fill((255,0,0))
 
 		self.rect = self.paddle.get_rect()
 		screen = pygame.display.get_surface()
-		self.area = screen.get_rect
+		
 		self.speed = speedb
 		self.state = "still"
 		self.re_pos_init()
@@ -121,19 +121,63 @@ class Paddle(pygame.sprite.Sprite):
 
 
 
+def main():
+	pygame.init()
+	size = width,height = 600,400
+	screen = pygames.display.set_mode(size)
+	#Set Background
+	background = pygame.Surface(screen.get_size())
+	background = background.convert()
+	background.fill((200,150,120))
 
-while 1:
-	for event in pygame.event.get():
-	    if event.type == pygame.QUIT: sys.exit()
 
-        if event.type == pygame.
-        ballrect = ballrect.move(speed)
-        if ballrect.left < 0 or ballrect.right > width:
-            speed[0] = -speed[0]
-        if ballrect.top < 0 or ballrect.bottom > height:
-            speed[1] = -speed[1]
+	global playerleft
+	playerleft = Paddle(side="left",speedb = 10)
+	global playerright
+	playerright = Paddle(side="right",speedb = 10)
+	angle_vel = [23, 4]
+	ball = Ball(angle_vel)
 
-        screen.fill(black)
-        screen.blit(ball, ballrect)
+	playersprites = pygame.sprite.Renderplain((playerleft,playerright))
+	ballsprite = pygrame.sprite.Renderplain((ball))
+
+	screen.blit(background,(0,0))
+	pygame.display.flip()
+
+	clock = pygame.time.Clock()
+
+
+	while 1:
+		clock.tick(60)
+
+		for event in pygame.event.get():
+	    	if event.type == pygame.QUIT:
+	    		return
+	 		elif event.type == KEYDOWN:
+	 			if event.key == K_a:
+					playerleft.moveup()
+				if event.key == K_z:
+					playerleft.movedown()
+				if event.key == K_UP:
+					playerright.moveup()
+				if event.key == K_DOWN:
+					playerright.movedown()
+	 		elif event.type == KEYUP:
+	 			if (event.key == K_a or event.key == K_z):
+	 				playerleft.state = "still"
+	 				playerleft.moveby=[0,0]
+	 			if (event.key == K_UP or event.key == K_DOWN):
+	 				playerright.state = "still"
+	 				playerright.moveby = [0,0]
+
+	 	screen.blit(background, ball.rect, ball.rect)
+		screen.blit(background, playerleft.rect, playerleft.rect)
+		screen.blit(background, playerleft.rect, playerleft.rect)
+		ballsprite.update()
+		playersprites.update()
+		ballsprite.draw(screen)
+		playersprites.draw(screen)
         pygame.display.flip()
+
+if _name_ == '_main_':main()
 
