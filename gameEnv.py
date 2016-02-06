@@ -1,6 +1,8 @@
 import pygame, sys, math
 from pygame.locals import *
 from random import randint
+import os
+
 
 
 #size = width, height = 320, 240
@@ -124,7 +126,7 @@ class Paddle(pygame.sprite.Sprite):
 def main():
 	pygame.init()
 	size = width,height = 600,400
-	screen = pygames.display.set_mode(size)
+	screen = pygame.display.set_mode(size)
 	#Set Background
 	background = pygame.Surface(screen.get_size())
 	background = background.convert()
@@ -132,9 +134,9 @@ def main():
 
 
 	global playerleft
-	playerleft = Paddle(side="left",speedb = 10)
+	playerleft = Paddle("left",10)
 	global playerright
-	playerright = Paddle(side="right",speedb = 10)
+	playerright = Paddle("right",10)
 	angle_vel = [23, 4]
 	ball = Ball(angle_vel)
 
@@ -151,8 +153,9 @@ def main():
 		clock.tick(60)
 
 		for event in pygame.event.get():
-	    	if event.type == pygame.QUIT:
-	    		return
+			if event.type == QUIT:
+				return
+
 	 		elif event.type == KEYDOWN:
 	 			if event.key == K_a:
 					playerleft.moveup()
@@ -179,5 +182,6 @@ def main():
 		playersprites.draw(screen)
         pygame.display.flip()
 
-if _name_ == '_main_':main()
+if __name__ == '__main__':
+	main()
 
