@@ -5,7 +5,7 @@ from pygame.locals import *
 from sys import exit
 import random
 import pygame.surfarray as surfarray
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 position = 5, 325
 os.environ['SDL_VIDEO_WINDOW_POS'] = str(position[0]) + "," + str(position[1])
@@ -44,6 +44,8 @@ class Game:
         self.bar1_move, self.bar2_move = 0., 0.
         self.bar1_score, self.bar2_score = 0, 0
         self.speed_x, self.speed_y = 8., 8.
+        UP = 1
+        DOWN = 2
 
     def next_frame(self, input_action):
         pygame.event.pump()
@@ -52,9 +54,9 @@ class Game:
         # if sum(input_vect) != 1:
         #raise ValueError('Multiple input actions!')
 
-        if input_action == 1:  # Key up
+        if input_action == UP:  # Key up
             self.bar1_move = -ai_speed
-        elif input_action == 2:  # Key down
+        elif input_action == DOWN:  # Key down
             self.bar1_move = ai_speed
         else:  # don't move
             self.bar1_move = 0
