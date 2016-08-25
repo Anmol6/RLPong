@@ -155,15 +155,10 @@ def train(Q_theta, final_h, Qinput, sess):
 	  
 
 
-
-
-	    
-
-	    
-
-
 def main():
     sess = tf.InteractiveSession()
     q, h, inp = convnet()
     train(q, h, inp)
 
+if __name__ == '__main__':
+    main()
