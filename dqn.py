@@ -158,7 +158,7 @@ def train(Q_theta, final_h, Qinput, sess):
 def main():
     sess = tf.InteractiveSession()
     q, h, inp = convnet()
-    train(q, h, inp)
+    train(q, h, inp, sess)
 
 if __name__ == '__main__':
     main()
