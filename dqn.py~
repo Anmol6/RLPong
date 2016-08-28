@@ -101,7 +101,7 @@ def train(Q_theta, final_h, Qinput, sess):
 
     # Symbolic MSELoss function and optimizer
     MSEloss = tf.reduce_mean(tf.square(Y_target - Q_a))
-    train_step = tf.train.GradientDescentOptimizer(0.00001).minimize(MSEloss)
+    train_step = tf.train.GradientDescentOptimizer(0.0001).minimize(MSEloss)
 	
     init_op = tf.initialize_all_variables()
 	
@@ -116,7 +116,7 @@ def train(Q_theta, final_h, Qinput, sess):
 	time += 1 
               
 	if(time > time_observation):
-	   e= max(e- 0.0001,0.04)
+	   e= max(e- 0.001,0.04)
 	   print e
     	   # e -= (e_final - e_init)/e_decay
 

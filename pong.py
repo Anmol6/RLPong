@@ -28,13 +28,14 @@ circle.set_colorkey((0, 0, 0))
 font = pygame.font.SysFont("calibri", 40)
 
 
-ai_speed = 15.
+ai_speed = 20.
 
-CONTACT_REWARD = 0.5
+CONTACT_REWARD = 1
 LOSE_REWARD = -1
-POINT_REWARD = 1
+POINT_REWARD = 2
 
-
+UP = 1
+DOWN = 2
 class Game:
 
     def __init__(self):
@@ -43,9 +44,8 @@ class Game:
         self.circle_x, self.circle_y = 307.5, 232.5
         self.bar1_move, self.bar2_move = 0., 0.
         self.bar1_score, self.bar2_score = 0, 0
-        self.speed_x, self.speed_y = 8., 8.
-        UP = 1
-        DOWN = 2
+        self.speed_x, self.speed_y = 6., 6.
+        
 
     def next_frame(self, input_action):
         pygame.event.pump()
@@ -60,23 +60,11 @@ class Game:
             self.bar1_move = ai_speed
         else:  # don't move
             self.bar1_move = 0
-
-        self.score1 = font.render(str(self.bar1_score), True, (255, 255, 255))
-        self.score2 = font.render(str(self.bar2_score), True, (255, 255, 255))
-
-        screen.blit(background, (0, 0))
-        frame = pygame.draw.rect(
-            screen, (255, 255, 255), Rect((5, 5), (630, 470)), 2)
-        middle_line = pygame.draw.aaline(
-            screen, (255, 255, 255), (330, 5), (330, 475))
-        screen.blit(bar1, (self.bar1_x, self.bar1_y))
-        screen.blit(bar2, (self.bar2_x, self.bar2_y))
-        screen.blit(circle, (self.circle_x, self.circle_y))
-        screen.blit(self.score1, (250., 210.))
-        screen.blit(self.score2, (380., 210.))
-
         self.bar1_y += self.bar1_move
 
+
+
+        
         # AI of the computer.
         if self.circle_x >= 305.:
             if not self.bar2_y == self.circle_y + 7.5:
@@ -131,6 +119,21 @@ class Game:
 
         self.circle_x += self.speed_x
         self.circle_y += self.speed_y
+
+
+	self.score1 = font.render(str(self.bar1_score), True, (255, 255, 255))
+        self.score2 = font.render(str(self.bar2_score), True, (255, 255, 255))
+
+        screen.blit(background, (0, 0))
+        frame = pygame.draw.rect(
+            screen, (255, 255, 255), Rect((5, 5), (630, 470)), 2)
+        middle_line = pygame.draw.aaline(
+            screen, (255, 255, 255), (330, 5), (330, 475))
+        screen.blit(bar1, (self.bar1_x, self.bar1_y))
+        screen.blit(bar2, (self.bar2_x, self.bar2_y))
+        screen.blit(circle, (self.circle_x, self.circle_y))
+        screen.blit(self.score1, (250., 210.))
+        screen.blit(self.score2, (380., 210.))
 
         image_data = pygame.surfarray.array3d(pygame.display.get_surface())
 
